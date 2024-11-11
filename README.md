@@ -33,3 +33,6 @@ While Uniswap pools can offer profitable opportunities, there are risks that liq
 
 ## Conclusion
 This research aims to provide a comprehensive analysis of Uniswap data to develop strategies for maximizing profits from liquidity provision. By analyzing historical data, we can identify which token pairs perform well in various market conditions and how liquidity providers can manage risk. The ultimate goal is to provide actionable insights that will enable users to optimize their participation in Uniswap pools and enhance their profitability while managing associated risks effectively.
+
+## References
+https://github.com/Uniswap/v3-subgraph/blob/main/schema.graphql
