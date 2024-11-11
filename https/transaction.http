@@ -81,7 +81,7 @@ query {
   }
 }
 
-### get the price range
+### get details on tickLower, tickUpper, and fee
 POST {{endpoint}}
 accept: application/json, multipart/mixed
 X-REQUEST-TYPE: GraphQL
@@ -122,4 +122,56 @@ query {
     }
   }
 }
+
+### get details on tickLower, tickUpper, and fee within a specific time frame
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query ($startTime: Int!, $endTime: Int!) {
+  transactions(where: { 
+    timestamp_gte: $startTime, 
+    timestamp_lte: $endTime 
+  }) {
+    id
+    timestamp
+    mints(where: { pool_not: null }) {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+    burns(where: { pool_not: null }) {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+  }
+}
+
+
+{
+    "startTime": 1672617600,
+    "endTime": 1672628660
+}
+
 
