@@ -1,0 +1,13 @@
+{
+  "editor.formatOnSave": false,
+  "files.associations": {
+    "**/out**.js": "plaintext"
+  },
+  "workbench.colorCustomizations": {
+    "tab.activeBorderTop": "#F9FAF2",
+    "tab.activeBorder": "#F9FAF2",
+    "activityBar.background": "#f655c1",
+    "titleBar.activeBackground": "#f655c1",
+    "titleBar.activeForeground": "#FBFAFA"
+  }
+}
