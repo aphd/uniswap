@@ -58,3 +58,68 @@ query {
     liquidity
   }
 }
+
+### calculate the fees
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  pools(first: 5) {
+    id
+    feesUSD
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+  }
+}
+
+### get the price range
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  transactions {
+    id
+    timestamp
+    mints {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+    burns {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+  }
+}
+

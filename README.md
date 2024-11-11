@@ -7,6 +7,8 @@ The focus of this analysis is to explore how to leverage Uniswap's historical da
 - **How can Uniswap data be analyzed to predict the best strategy for maximizing returns from liquidity pools?**
 - **What are the risks associated with providing liquidity, and how can they be mitigated?**
 - **How can historical data on token pair performance guide decision-making for liquidity providers?**
+- How does fee tier selection in Uniswap V3 affect liquidity providers' profitability and impermanent loss across varying market conditions, and what criteria should be used to determine an optimal fee tier for different asset pairs?
+- What is the impact of price range selection on the effectiveness of liquidity provision in Uniswap V3, and how can liquidity providers optimize their range to balance profitability with exposure risk?
 
 ## Key Considerations
 This analysis will primarily focus on:
@@ -36,3 +38,4 @@ This research aims to provide a comprehensive analysis of Uniswap data to develo
 
 ## References
 https://github.com/Uniswap/v3-subgraph/blob/main/schema.graphql
+https://dailydefi.org/tools/impermanent-loss-calculator/
