@@ -6,8 +6,10 @@ const { writeDataToCSV } = require('./utils/write-data');
 const main = async (startTime, endTime) => {
   const query = getQuery();
   const variables = { startTime, endTime };
+  console.log(`${new Date(startTime * 1000).toLocaleString('en-GB', { timeZone: 'UTC' })} to ${new Date(endTime * 1000).toLocaleString('en-GB', { timeZone: 'UTC' })}`);
   const { data: { transactions } } = await fetchData(query, variables);
   const { flattenedMints, flattenedBurns } = flattenBurnsAndMints(transactions);
+  console.log(`Burns Length :${flattenedBurns.length} \t Mints Length :${flattenedMints.length} `)
 
   // Write in append mode
   writeDataToCSV(flattenedBurns, flattenedMints);
@@ -40,6 +42,6 @@ const loop = async ({startDate, endDate}) => {
 }
 
 // Run the loop function to start processing
-const startDate = '11-11-2024 18:00';  // Example start date
-const endDate = '11-12-2024 00:00';    // Example end date
+const startDate = '11-01-2024 23:59';  // Example start date mm/dd/yyy
+const endDate = '11-02-2024 23:59';    // Example end date mm/dd/yyy
 loop({ startDate, endDate });

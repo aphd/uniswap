@@ -1,11 +1,5 @@
-
-
-
 const endpoint = 'https://gateway.thegraph.com/api/deployments/id/QmTZ8ejXJxRo7vDBS4uwqBeGoxLSWbhaA7oXa1RvxunLy7';  // Replace with your actual GraphQL endpoint
 
-
-
-// Set up the request headers
 const headers = {
     'Accept': 'application/json',
     'X-REQUEST-TYPE': 'GraphQL',
@@ -14,9 +8,7 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
-// Make the POST request to the GraphQL endpoint
 const fetchData = async (query, variables) => {
-
     const response = await fetch(endpoint, {
         method: 'POST',
         headers: headers,

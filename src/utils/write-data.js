@@ -15,7 +15,6 @@ const writeDataToCSV = async (burnsData, mintsData) => {
     if (burnsData && burnsData.length > 0) {
         const burnsCSV = parse(burnsData, { header: false }); // Do not add header in json2csv
         fs.appendFileSync('burns.csv', burnsCSV + '\n'); // Add a new line after appending
-        console.log('Burns data appended to burns.csv');
     } else {
         console.log('No burns data to write.');
     }
@@ -29,7 +28,6 @@ const writeDataToCSV = async (burnsData, mintsData) => {
     if (mintsData && mintsData.length > 0) {
         const mintsCSV = parse(mintsData, { header: false }); // Do not add header in json2csv
         fs.appendFileSync('mints.csv', mintsCSV + '\n'); // Add a new line after appending
-        console.log('Mints data appended to mints.csv');
     } else {
         console.log('No mints data to write.');
     }
