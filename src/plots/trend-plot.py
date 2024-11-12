@@ -18,8 +18,15 @@ def plot_token_trends(file_name, token0, token1, max_tick_difference):
 
     # Plotting tickLower and tickUpper trends over time
     plt.figure(figsize=(12, 6))
-    plt.plot(filtered_df['timestamp'], filtered_df['tickLower'], label='tickLower', marker='o')
-    plt.plot(filtered_df['timestamp'], filtered_df['tickUpper'], label='tickUpper', marker='o')
+    plt.plot(filtered_df['timestamp'], filtered_df['tickLower'], label='tickLower', marker='o', linestyle='-')
+    plt.plot(filtered_df['timestamp'], filtered_df['tickUpper'], label='tickUpper', marker='o', linestyle='-')
+
+    # Adding numerical values on the plot
+    for i, value in enumerate(filtered_df['tickLower']):
+        plt.text(filtered_df['timestamp'].iloc[i], value, str(value), fontsize=8, ha='center', va='bottom')
+        
+    for i, value in enumerate(filtered_df['tickUpper']):
+        plt.text(filtered_df['timestamp'].iloc[i], value, str(value), fontsize=8, ha='center', va='bottom')
 
     # Formatting the plot
     plt.xlabel('Time (dd/mm/yyyy hh:mm)')
@@ -31,4 +38,4 @@ def plot_token_trends(file_name, token0, token1, max_tick_difference):
     plt.show()
 
 # Example usage:
-plot_token_trends('mints.csv', 'USDC', 'WETH', 50)
+plot_token_trends('mints.csv', 'USDC', 'WETH', 500)

@@ -174,4 +174,32 @@ query ($startTime: Int!, $endTime: Int!) {
     "endTime": 1672628660
 }
 
+### get details on tickLower, tickUpper, and fee within a specific time frame
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  pools(first: 1) {
+    id
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+    totalValueLockedUSD
+    volumeUSD
+    feesUSD
+    feeTier
+    # Assuming APR can be calculated as (feesUSD / totalValueLockedUSD) * (365 / days)
+    # Replace `days` with the number of days you want to calculate APR for.
+  }
+}
+
+{}
 

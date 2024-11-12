@@ -7,8 +7,14 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "main.js",
-            "program": "${workspaceFolder}/src/main.js"
+            "name": "apr-download.js",
+            "program": "${workspaceFolder}/src/apr-download.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "mints-burns-download.js",
+            "program": "${workspaceFolder}/src/mints-burns-download.js"
         }
     ]
 }

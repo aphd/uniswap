@@ -33,4 +33,21 @@ const writeDataToCSV = async (burnsData, mintsData) => {
     }
 }
 
-module.exports = { writeDataToCSV }
+const writeCSV = async (data, fn) => {
+    // Check if the file exists
+    const fileExists = fs.existsSync(fn);
+
+    // Prepare the CSV data
+    const csvData = parse(data, { header: !fileExists });
+
+    // Append data if file exists, otherwise create a new file
+    fs.appendFile(fn, csvData, (err) => {
+        if (err) {
+            console.error('Error writing to CSV file:', err);
+        } else {
+            console.log('Data successfully written to CSV file');
+        }
+    });
+}
+
+module.exports = { writeDataToCSV, writeCSV }
