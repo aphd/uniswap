@@ -13,11 +13,7 @@ const main = async (startTime, endTime) => {
   writeDataToCSV(flattenedBurns, flattenedMints);
 }
 
-const loop = async () => {
-  // Define the start and end date
-  const startDate = '11-11-2024 01:00';  // Example start date
-  const endDate = '11-11-2024 06:00';    // Example end date
-
+const loop = async ({startDate, endDate}) => {
   // Convert startDate and endDate to Unix time (timestamp)
   const startTime = new Date(startDate).getTime() / 1000; // Convert to Unix time (seconds)
   const endTime = new Date(endDate).getTime() / 1000;
@@ -44,4 +40,6 @@ const loop = async () => {
 }
 
 // Run the loop function to start processing
-loop();
+const startDate = '11-11-2024 18:00';  // Example start date
+const endDate = '11-12-2024 00:00';    // Example end date
+loop({ startDate, endDate });
