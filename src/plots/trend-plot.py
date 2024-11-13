@@ -38,4 +38,4 @@ def plot_token_trends(file_name, token0, token1, max_tick_difference):
     plt.show()
 
 # Example usage:
-plot_token_trends('mints.csv', 'USDC', 'WETH', 500)
+plot_token_trends('mints.csv', 'USDC', 'WETH', 100)

@@ -69,6 +69,7 @@ const getMintsGQ = () => `
 const getAPR_GQ = () => `query {
   pools(first: 1000) {
     id
+    feeTier
     token0 {
       id
       symbol
@@ -80,8 +81,18 @@ const getAPR_GQ = () => `query {
     totalValueLockedUSD
     volumeUSD
     feesUSD
-    apr: feesUSD
   }
 }`;
 
-module.exports = {getMintsGQ, getQuery, getAPR_GQ};
+const getSwap = (pool_id) => `query {
+  swaps(first: 1000, where: { 
+    timestamp_gte: 1693526400,
+    pool: "${pool_id}"
+  }, orderBy: timestamp, orderDirection: asc) {
+    amount0
+    amount1
+    timestamp
+  }
+}`;
+
+module.exports = { getMintsGQ, getQuery, getAPR_GQ, getSwap };

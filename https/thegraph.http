@@ -1,0 +1,43 @@
+@endpoint=https://thegraph.com/explorer/api/playground/QmTZ8ejXJxRo7vDBS4uwqBeGoxLSWbhaA7oXa1RvxunLy7
+@origin=https://thegraph.com
+
+### GET 
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+content-type: application/json
+origin: {{origin}}
+# X-REQUEST-TYPE: GraphQL
+
+{
+  "query": "{\n  factories(first: 5) {\n    id\n    poolCount\n    txCount\n    totalVolumeUSD\n  }\n  bundles(first: 5) {\n    id\n    ethPriceUSD\n  }\n}"
+}
+
+### GET 
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+content-type: application/json
+origin: {{origin}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+  pools(first: 1) {
+    id
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+    totalValueLockedUSD
+    volumeUSD
+    feesUSD
+    feeTier
+    # Assuming APR can be calculated as (feesUSD / totalValueLockedUSD) * (365 / days)
+    # Replace `days` with the number of days you want to calculate APR for.
+  }
+}
+
+{}
+

@@ -34,6 +34,7 @@ const flattenBurnsAndMints = (transactions) => {
 const flattenPools = (data) => {
     return data.map(item => ({
         apr: item.apr,
+        feeTier: item.feeTier,
         feesUSD: item.feesUSD,
         id: item.id,
         token0_id: item.token0.id,

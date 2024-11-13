@@ -17,7 +17,7 @@ const calculateApr = (data) => {
       const totalValueLockedUSD = parseFloat(item.totalValueLockedUSD);
   
       // Calculate APR as feesUSD / totalValueLockedUSD
-      const aprCalculated = feesUSD / totalValueLockedUSD;
+      const aprCalculated = (feesUSD * 365 / totalValueLockedUSD ) * 100;
   
       // Return the new object with the calculated APR
       return {
