@@ -41,3 +41,40 @@ query {
 
 {}
 
+### GET  the cumulative amount of USDC-WETH pair deposits where the pool_id is 0x07a72f8f6a29cf501e7226ca82264f9ee79380e7
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+content-type: application/json
+origin: {{origin}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+  swaps(first: 1000, where: { 
+    timestamp_gte: 1693526400,
+    pool: "0x07a72f8f6a29cf501e7226ca82264f9ee79380e7"
+  }, orderBy: timestamp, orderDirection: asc) {
+    amount0
+    amount1
+    timestamp
+    pool {
+      id
+      token0 { symbol }
+    }
+  }
+}
+
+### get details on tickLower, tickUpper, and fee within a specific time frame
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+content-type: application/json
+origin: {{origin}}
+X-REQUEST-TYPE: GraphQL
+
+query {
+  pools(orderBy: volumeUSD, orderDirection: desc, first: 10) {
+    id
+    token0 { symbol }
+    token1 { symbol }
+    volumeUSD
+  }
+}

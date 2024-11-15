@@ -7,14 +7,20 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "mints-burns-download.js",
+            "program": "${workspaceFolder}/src/mints-burns-download.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "pools-download.js",
             "program": "${workspaceFolder}/src/pools-download.js"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "mints-burns-download.js",
-            "program": "${workspaceFolder}/src/mints-burns-download.js"
+            "name": "swap-download.js",
+            "program": "${workspaceFolder}/src/swap-download.js"
         }
     ]
 }
