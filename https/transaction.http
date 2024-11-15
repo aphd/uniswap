@@ -1,0 +1,206 @@
+@endpoint=https://gateway.thegraph.com/api/deployments/id/QmTZ8ejXJxRo7vDBS4uwqBeGoxLSWbhaA7oXa1RvxunLy7
+@aorization=Bearer 944b560e76f53abf0739468966998887
+@origin=https://thegraph.com
+
+### track the overall volume and activity of pools across different factories
+# The query retrieves information about the factories on Uniswap, which are essentially the smart contracts that manage the liquidity pools on the platform
+# Bundles, which typically represent a grouping of related data like token prices or liquidity data in Uniswap. 
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: {{authorization}}
+origin: {{origin}}
+
+query {
+  factories(first: 5) {
+    id
+    poolCount
+    txCount
+    totalVolumeUSD
+    totalVolumeETH
+    totalFeesUSD
+    totalFeesETH
+    owner
+  }
+  bundles(first: 5) {
+    id
+    ethPriceUSD
+  }
+}
+
+### get tokens
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  tokens(first: 5) {
+    id
+    symbol
+    name
+  } 
+}
+
+### get pools
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  pools(first: 5) {
+    id
+    createdAtTimestamp
+    createdAtBlockNumber
+    liquidity
+  }
+}
+
+### calculate the fees
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  pools(first: 5) {
+    id
+    feesUSD
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+  }
+}
+
+### get details on tickLower, tickUpper, and fee
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  transactions {
+    id
+    timestamp
+    mints {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+    burns {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+  }
+}
+
+### get details on tickLower, tickUpper, and fee within a specific time frame
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query ($startTime: Int!, $endTime: Int!) {
+  transactions(where: { 
+    timestamp_gte: $startTime, 
+    timestamp_lte: $endTime 
+  }) {
+    id
+    timestamp
+    mints(where: { pool_not: null }) {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+    burns(where: { pool_not: null }) {
+      pool {
+        id
+        token0 {
+          symbol
+        }
+        token1 {
+          symbol
+        }
+        feeTier
+      }
+      tickLower
+      tickUpper
+    }
+  }
+}
+
+
+{
+    "startTime": 1672617600,
+    "endTime": 1672628660
+}
+
+### get details on tickLower, tickUpper, and fee within a specific time frame
+POST {{endpoint}}
+accept: application/json, multipart/mixed
+X-REQUEST-TYPE: GraphQL
+authorization: Bearer 944b560e76f53abf0739468966998887
+origin: https://thegraph.com
+
+query {
+  pools(first: 1) {
+    id
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+    totalValueLockedUSD
+    volumeUSD
+    feesUSD
+    feeTier
+    # Assuming APR can be calculated as (feesUSD / totalValueLockedUSD) * (365 / days)
+    # Replace `days` with the number of days you want to calculate APR for.
+  }
+}
+
+{}
+
+

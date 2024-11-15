@@ -1,0 +1,93 @@
+### GET a token price
+POST https://interface.gateway.uniswap.org/v1/graphql
+Content-Type: application/json
+Origin: https://app.uniswap.org
+Referer: https://app.uniswap.org/
+X-REQUEST-TYPE: GraphQL
+
+query TokenSpotPrice($chain: Chain!, $address: String = null) {
+  token(chain: $chain, address: $address) {
+    id
+    address
+    chain
+    name
+    symbol
+    project {
+      id
+      markets(currencies: [USD]) {
+        id
+        price {
+          id
+          value
+        }
+      }
+    }
+  }
+}
+
+{
+  "chain": "ETHEREUM",
+  "address": null
+}
+
+### GET ticks of a specific Uniswap V3 liquidity pool on the Polygon blockchain
+# analysis of liquidity ranges and pool pricing dynamics
+POST https://interface.gateway.uniswap.org/v1/graphql
+Content-Type: application/json
+Origin: https://app.uniswap.org
+Referer: https://app.uniswap.org/
+X-REQUEST-TYPE: GraphQL
+
+query V3PoolTransactions($chain: Chain!, $address: String!, $first: Int!, $cursor: Int) {
+  v3Pool(chain: $chain, address: $address) {
+    id
+    transactions(first: $first, timestampCursor: $cursor) {
+      timestamp
+      account
+      token0Quantity
+      token0 {
+        ...PoolTransactionToken
+      }
+      token1 {
+        ...PoolTransactionToken
+      }
+      token1Quantity
+      usdValue {
+        value
+      }
+      type
+    }
+  }
+}
+fragment PoolTransactionToken on Token {
+  symbol
+  chain
+  decimals
+}
+
+{
+  "first": 10,
+  "chain": "POLYGON",
+  "address": "0xA4D8c89f0c20efbe54cBa9e7e7a7E509056228D9",
+  "cursor": 1731669216
+}
+
+### GET feeTier
+POST https://interface.gateway.uniswap.org/v1/graphql
+Content-Type: application/json
+Origin: https://app.uniswap.org
+Referer: https://app.uniswap.org/
+X-REQUEST-TYPE: GraphQL
+
+query poolDayDatas(first: 10, orderBy: date, where: {
+    pool: "0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801",
+    date_gt: 1633642435
+  } ) {
+    date
+    liquidity
+    sqrtPrice
+    token0Price
+    token1Price
+    volumeToken0
+    volumeToken1
+  }
