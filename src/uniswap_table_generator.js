@@ -49,8 +49,8 @@ const parseCSV = async (filePath) => {
     const _30DVolValue = convertToNumber(_30DVol);
 
     // Calcolo dell'APR e del rapporto 1DVol/TVL
-    const APR1DVol = calculateAPR1DVol(feeValue, TVLValue, _1DVolValue).toFixed(2);
-    const APR30DVol = calculateAPR30DVol(feeValue, TVLValue, _30DVolValue).toFixed(2);
+    const APR1DVol = (calculateAPR1DVol(feeValue, TVLValue, _1DVolValue) * 1).toFixed(2); // Moltiplicato per 100 per ottenere la percentuale
+    const APR30DVol = (calculateAPR30DVol(feeValue, TVLValue, _30DVolValue) * 1).toFixed(2); // Moltiplicato per 100 per ottenere la percentuale
     const _1DVolToTVL = calculate1DVolToTVL(_1DVolValue, TVLValue).toFixed(6);
 
     return { pair: `${token0}-${token1}`, fee, TVL, _1DVol, _30DVol, APR1DVol, APR30DVol, _1DVolToTVL };
@@ -64,15 +64,16 @@ const generateLatexTable = (data) => {
   let table = `
 \\begin{table*}[h!]
 \\centering
-\\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\\begin{tabular}{|c|r|r|r|r|r|r|r|}
 \\hline
-\\textbf{Pair} & \\textbf{Fee (\%)} & \\textbf{TVL} & \\textbf{1DVol} & \\textbf{30DVol} & \\textbf{APR (1DVol)} & \\textbf{APR (30DVol)} & \\textbf{1DVol/TVL} \\\\ 
+\\textbf{Pair} & \\textbf{Fee (\\%)} & \\textbf{TVL} & \\textbf{1DVol} & \\textbf{30DVol} & \\textbf{APR (1DVol) (\\%)} & \\textbf{APR (30DVol) (\\%)} & \\textbf{1DVol/TVL} \\\\ 
 \\hline
 `;
 
   data.forEach(row => {
+    // Aggiungi il simbolo "%" alle colonne APR e escape il simbolo di percentuale
     table += `
-${row.pair} & ${row.fee} & ${row.TVL} & ${row._1DVol} & ${row._30DVol} & ${row.APR1DVol} & ${row.APR30DVol} & ${row._1DVolToTVL} \\\\ 
+${row.pair} & ${row.fee} & ${row.TVL} USD & ${row._1DVol} USD & ${row._30DVol} USD & ${row.APR1DVol} & ${row.APR30DVol} & ${row._1DVolToTVL} \\\\ 
 `;
   });
 

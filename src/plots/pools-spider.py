@@ -1,90 +1,82 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
-import random
+import matplotlib.pyplot as plt
+from math import pi
 
-def plot_spider_chart(file_name='pools.csv', tokens_to_display=None):
-    # Load the CSV data
-    df = pd.read_csv(file_name)
+def plot_spider(csv_file):
+    # Load the data from the CSV file
+    df = pd.read_csv(csv_file)
 
-    # Filter the data for the token pairs of interest
-    if tokens_to_display:
-        tokens_to_display = [tuple(pair) for pair in tokens_to_display]  # Ensure pairs are tuples
-        df = df[
-            df.apply(
-                lambda row: (row['token0_symbol'], row['token1_symbol']) in tokens_to_display or
-                            (row['token1_symbol'], row['token0_symbol']) in tokens_to_display,
-                axis=1
-            )
-        ]
+    # Define the categories
+    categories = ['fee', 'TVL', '1DVol', '30DVol']
+    
+    # Prepare the data for plotting
+    values = df[categories].values
 
-    # Remove any rows where the relevant columns are missing
-    df = df.dropna(subset=['feeTier', 'feesUSD', 'totalValueLockedUSD'])
+    # Convert the values to numeric, handling 'M' and 'B' suffixes
+    converted_values = []
+    for row in values:
+        converted_row = []
+        for v in row:
+            if isinstance(v, str) and 'M' in v:
+                converted_row.append(float(v.replace('M', '').replace(',', '')) * 1e6)
+            elif isinstance(v, str) and 'B' in v:
+                converted_row.append(float(v.replace('B', '').replace(',', '')) * 1e9)
+            else:
+                converted_row.append(float(v))  # Directly convert to float if it's already numeric
+        converted_values.append(converted_row)
 
-    # Define metrics and their scales
-    metrics = ['feeTier', 'feesUSD', 'totalValueLockedUSD']
-    metric_ranges = {metric: (df[metric].min(), df[metric].max()) for metric in metrics}
+    converted_values = np.array(converted_values)
 
-    # Normalize the metrics for plotting
-    normalized_data = {
-        metric: (df[metric] - metric_ranges[metric][0]) / (metric_ranges[metric][1] - metric_ranges[metric][0])
-        for metric in metrics
-    }
+    # Calculate APR using the provided formula
+    fee = converted_values[:, 0]  # fee
+    tvl = converted_values[:, 1]   # TVL
+    vol_30d = converted_values[:, 3]  # 30DVol
 
-    # Prepare data for each token pair
-    token_pairs = df.apply(lambda row: f"{row['token0_symbol']}/{row['token1_symbol']}", axis=1)
-    token_data = {}
+    daily_fee_income = (vol_30d * fee) / 30
+    annual_fee_income = daily_fee_income * 365
+    apr_values = annual_fee_income / tvl
 
-    for pair in token_pairs.unique():
-        filtered = df[token_pairs == pair]
-        token_data[pair] = [
-            normalized_data['feeTier'][filtered.index].mean(),
-            normalized_data['feesUSD'][filtered.index].mean(),
-            normalized_data['totalValueLockedUSD'][filtered.index].mean()
-        ]
+    # Clip APR to avoid negative values (in case of zero TVL)
+    apr_values = np.clip(apr_values, 0, None)
 
-    # Create the angles for the spider chart
-    labels = metrics
-    angles = np.linspace(0, 2 * np.pi, len(labels), endpoint=False).tolist()
-    angles += angles[:1]  # Closing the circle
+    # Add the computed APR to the converted values
+    converted_values = np.column_stack((converted_values, apr_values))
 
-    # Create the figure and axis
-    fig, ax = plt.subplots(figsize=(8, 8), dpi=100, subplot_kw=dict(polar=True))
+    # Normalize values based on the max for each category
+    max_values = converted_values.max(axis=0)
+    normalized_values = converted_values / max_values
 
-    # Generate random colors for each token pair
-    random.seed(42)  # For reproducibility
-    colors = [f"#{random.randint(0, 0xFFFFFF):06x}" for _ in token_pairs.unique()]
+    # Number of variables
+    num_vars = len(categories) + 1  # Include calculated APR
 
-    # Plot the data for each token pair
-    for i, (pair, values) in enumerate(token_data.items()):
-        values += values[:1]  # Closing the circle
-        ax.plot(angles, values, label=pair, color=colors[i], linewidth=2)
-        ax.fill(angles, values, color=colors[i], alpha=0.25)
+    # Compute angle for each axis
+    angles = [n / float(num_vars) * 2 * pi for n in range(num_vars)]
+    angles += angles[:1]  # Complete the loop
 
-    # Set up labels and scales for each axis
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels)
+    # Create the spider plot
+    fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
 
-    for i, metric in enumerate(labels):
-        min_val, max_val = metric_ranges[metric]
-        ticks = np.linspace(min_val, max_val, num=5)
-        tick_angles = [angles[i]] * len(ticks)
-        for tick_angle, tick_val in zip(tick_angles, ticks):
-            ax.text(tick_angle, tick_val / max_val, f"{tick_val:.2f}", horizontalalignment="center", verticalalignment="bottom", fontsize=8)
+    # Add each token's data to the plot
+    for index, row in df.iterrows():
+        values_row = normalized_values[index].tolist()
+        values_row += values_row[:1]  # Complete the loop
+        ax.fill(angles, values_row, alpha=0.25, label=f"{row['token0']}/{row['token1']}")
+        ax.plot(angles, values_row, linewidth=2)  # Line around the area
 
-    # Add a grid for better visualization
-    ax.yaxis.grid(True, linestyle='--', color='gray', alpha=0.7)
+    # Labels for each axis
+    plt.xticks(angles[:-1], categories + ['APR'], color='grey', size=12)
 
-    # Add a legend
-    ax.legend(loc='upper right', bbox_to_anchor=(1.5, 1.1), title="Token Pairs")
+    # Add title and legend
+    plt.title('Metrics Polls: Spider Plot of Uniswap Pools', size=15, color='black', weight='bold')
+    plt.legend(loc='upper right', bbox_to_anchor=(0.1, 0.1))
 
-    # Title
-    ax.set_title('Spider Chart of Pool Metrics', va='bottom')
+    # Display max values on the plot
+    for i, angle in enumerate(angles[:-1]):
+        ax.text(angle, 1.05, f"{max_values[i]:,.0f}", horizontalalignment='center', size=12, color='black')
 
     # Show the plot
-    plt.tight_layout()
     plt.show()
 
 # Example usage
-tokens = [['EURT', 'USDT'], ['CEL', 'WETH']]  # Add token pairs you want to display
-plot_spider_chart(file_name='pools.csv', tokens_to_display=tokens)
+plot_spider('uniswap_pools.csv')
