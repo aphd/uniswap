@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 def plot_heatmap(volume_threshold, token_symbols=None):
     # Load the data from the CSV file
-    df = pd.read_csv('pools.csv')
+    df = pd.read_csv('../data/pools.csv')
 
     # Create a new column for the token pair
     df['token_pair'] = df['token0_symbol'] + '/' + df['token1_symbol']

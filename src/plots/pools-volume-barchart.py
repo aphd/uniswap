@@ -26,4 +26,4 @@ def plot_volume_bar_chart(csv_file, filter_tokens=None, volume_threshold=0):
     plt.show()
 
 # Example usage:
-plot_volume_bar_chart('pools.csv', filter_tokens=['USD', 'ETH', 'EUR', 'BTC'], volume_threshold=100_000_000)
+plot_volume_bar_chart('../data/pools.csv', filter_tokens=['USD', 'ETH', 'EUR', 'BTC'], volume_threshold=100_000_000)

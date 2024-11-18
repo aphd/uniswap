@@ -73,4 +73,4 @@ def plot_spider(csv_file):
     plt.show()
 
 # Example usage
-plot_spider('uniswap_pools.csv')
+plot_spider('../data/uniswap_pools.csv')
