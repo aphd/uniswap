@@ -31,4 +31,19 @@ const flattenBurnsAndMints = (transactions) => {
     return { flattenedBurns, flattenedMints };
 }
 
-module.exports = {flattenBurnsAndMints}
+const flattenPools = (data) => {
+    return data.map(item => ({
+        apr: item.apr,
+        feeTier: item.feeTier,
+        feesUSD: item.feesUSD,
+        id: item.id,
+        token0_id: item.token0.id,
+        token0_symbol: item.token0.symbol,
+        token1_id: item.token1.id,
+        token1_symbol: item.token1.symbol,
+        totalValueLockedUSD: item.totalValueLockedUSD,
+        volumeUSD: item.volumeUSD,
+    }));
+}
+
+module.exports = { flattenBurnsAndMints, flattenPools }

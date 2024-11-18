@@ -1,5 +1,5 @@
 @endpoint=https://gateway.thegraph.com/api/deployments/id/QmTZ8ejXJxRo7vDBS4uwqBeGoxLSWbhaA7oXa1RvxunLy7
-@aorization=Bearer 944b560e76f53abf0739468966998887
+@authorization=Bearer 944b560e76f53abf0739468966998887
 @origin=https://thegraph.com
 
 ### track the overall volume and activity of pools across different factories

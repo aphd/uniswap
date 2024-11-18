@@ -15,7 +15,6 @@ const writeDataToCSV = async (burnsData, mintsData) => {
     if (burnsData && burnsData.length > 0) {
         const burnsCSV = parse(burnsData, { header: false }); // Do not add header in json2csv
         fs.appendFileSync('burns.csv', burnsCSV + '\n'); // Add a new line after appending
-        console.log('Burns data appended to burns.csv');
     } else {
         console.log('No burns data to write.');
     }
@@ -29,10 +28,26 @@ const writeDataToCSV = async (burnsData, mintsData) => {
     if (mintsData && mintsData.length > 0) {
         const mintsCSV = parse(mintsData, { header: false }); // Do not add header in json2csv
         fs.appendFileSync('mints.csv', mintsCSV + '\n'); // Add a new line after appending
-        console.log('Mints data appended to mints.csv');
     } else {
         console.log('No mints data to write.');
     }
 }
 
-module.exports = { writeDataToCSV }
+const writeCSV = async (data, fn) => {
+    // Check if the file exists
+    const fileExists = fs.existsSync(fn);
+
+    // Prepare the CSV data
+    const csvData = parse(data, { header: !fileExists });
+
+    // Append data if file exists, otherwise create a new file
+    fs.appendFile(fn, csvData, (err) => {
+        if (err) {
+            console.error('Error writing to CSV file:', err);
+        } else {
+            console.log('Data successfully written to CSV file');
+        }
+    });
+}
+
+module.exports = { writeDataToCSV, writeCSV }
