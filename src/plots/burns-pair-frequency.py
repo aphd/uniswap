@@ -30,4 +30,4 @@ def plot_token_pairs(filename, min_occurrences):
     plt.show()
 
 # Example usage: Plot token pairs with occurrences >= 5
-plot_token_pairs('burns.csv', 15)
+plot_token_pairs('../data/burns.csv', 15)
